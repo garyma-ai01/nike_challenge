@@ -1,0 +1,69 @@
+prod:
+  dbx:
+    workspace: nike-sole-react
+    sdb_path: app/dpf/halo
+    sdb_key: ServicePrincipal_nike-sole-react.cloud.databricks.com_App.NikeSole.halo.Developer
+    api_endpoints:
+      catalogs: /api/2.1/unity-catalog/catalogs
+      schemas: /api/2.1/unity-catalog/schemas
+      tables: /api/2.1/unity-catalog/tables
+
+  cerberus:
+    endpoint: https://prod.cerberus.nikecloud.com
+    db_secrets: app/halo-bmx/data-quality/db-prod
+  nsp:
+    topics:
+      observability-metrics: v1-pdr-auw2-ems-d08da94f-c27a-4093-98e3-bc636c1e76bd-observability-metrics-prod
+    broker_endpoint: nke-nsp-production-bro-gcl.us-west-2.prd.nsp.nike.com:9500
+    token_url: https://nike.okta.com/oauth2/aus27z7p76as9Dz0H1t7/v1/token
+  nike_okta:
+    key_url: https://nike.okta.com/oauth2/aus27z7p76as9Dz0H1t7/v1/keys
+    aud: https://nike.okta.com
+  bg_jobs:
+    expiration_duration: 900
+
+test:
+  dbx:
+    workspace: nike-sole-react
+    sdb_path: app/dpf/halo
+    sdb_key: ServicePrincipal_nike-sole-react.cloud.databricks.com_App.NikeSole.halo.Developer
+    api_endpoints:
+      catalogs: /api/2.1/unity-catalog/catalogs
+      schemas: /api/2.1/unity-catalog/schemas
+      tables: /api/2.1/unity-catalog/tables
+  cerberus:
+    endpoint: https://prod.cerberus.nikecloud.com
+    db_secrets: app/halo-bmx/data-quality/db-test
+  nsp:
+    topics:
+      observability-metrics: v1-pdr-auw2-ems-55319512-2889-4784-a45a-f1130918e924-observability-metrics-test
+    broker_endpoint: nke-nsp-production-bro-gcl.us-west-2.prd.nsp.nike.com:9500
+    token_url: https://nike.okta.com/oauth2/aus27z7p76as9Dz0H1t7/v1/token
+  nike_okta:
+    key_url: https://nike-qa.oktapreview.com/oauth2/ausa0mcornpZLi0C40h7/v1/keys
+    aud: https://nike-qa.oktapreview.com
+  bg_jobs:
+    expiration_duration: 900
+
+dev:
+  dbx:
+    workspace: nike-sole-react
+    sdb_path: app/dpf/halo
+    sdb_key: ServicePrincipal_nike-sole-react.cloud.databricks.com_App.NikeSole.halo.Developer
+    api_endpoints:
+      catalogs: /api/2.1/unity-catalog/catalogs
+      schemas: /api/2.1/unity-catalog/schemas
+      tables: /api/2.1/unity-catalog/tables
+  cerberus:
+    endpoint: https://prod.cerberus.nikecloud.com
+    db_secrets: app/halo-bmx/data-quality/db-dev
+  nsp:
+    topics:
+      observability-metrics: v1-pdr-auw2-ems-3777331f-af79-4bec-8fa0-feb250d71ab3-observability-metrics-dev
+    broker_endpoint: nke-nsp-production-bro-gcl.us-west-2.prd.nsp.nike.com:9500
+    token_url: https://nike.okta.com/oauth2/aus27z7p76as9Dz0H1t7/v1/token
+  nike_okta:
+    key_url: https://nike-qa.oktapreview.com/oauth2/ausa0mcornpZLi0C40h7/v1/keys
+    aud: https://nike-qa.oktapreview.com
+  bg_jobs:
+    expiration_duration: 900
