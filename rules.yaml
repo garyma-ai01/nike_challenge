@@ -1,5 +1,5 @@
 rules_data:
-  - product: your_productasgasg
+  - product: your_productasgasg_v1
     table: dq_spark_dev.customer_order
     type: row_dq
     name: sales_greater_than_zero
