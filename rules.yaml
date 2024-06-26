@@ -1,69 +1,198 @@
-prod:
-  dbx:
-    workspace: nike-sole-react
-    sdb_path: app/dpf/halo
-    sdb_key: ServicePrincipal_nike-sole-react.cloud.databricks.com_App.NikeSole.halo.Developer
-    api_endpoints:
-      catalogs: /api/2.1/unity-catalog/catalogs
-      schemas: /api/2.1/unity-catalog/schemas
-      tables: /api/2.1/unity-catalog/tables
-
-  cerberus:
-    endpoint: https://prod.cerberus.nikecloud.com
-    db_secrets: app/halo-bmx/data-quality/db-prod
-  nsp:
-    topics:
-      observability-metrics: v1-pdr-auw2-ems-d08da94f-c27a-4093-98e3-bc636c1e76bd-observability-metrics-prod
-    broker_endpoint: nke-nsp-production-bro-gcl.us-west-2.prd.nsp.nike.com:9500
-    token_url: https://nike.okta.com/oauth2/aus27z7p76as9Dz0H1t7/v1/token
-  nike_okta:
-    key_url: https://nike.okta.com/oauth2/aus27z7p76as9Dz0H1t7/v1/keys
-    aud: https://nike.okta.com
-  bg_jobs:
-    expiration_duration: 900
-
-test:
-  dbx:
-    workspace: nike-sole-react
-    sdb_path: app/dpf/halo
-    sdb_key: ServicePrincipal_nike-sole-react.cloud.databricks.com_App.NikeSole.halo.Developer
-    api_endpoints:
-      catalogs: /api/2.1/unity-catalog/catalogs
-      schemas: /api/2.1/unity-catalog/schemas
-      tables: /api/2.1/unity-catalog/tables
-  cerberus:
-    endpoint: https://prod.cerberus.nikecloud.com
-    db_secrets: app/halo-bmx/data-quality/db-test
-  nsp:
-    topics:
-      observability-metrics: v1-pdr-auw2-ems-55319512-2889-4784-a45a-f1130918e924-observability-metrics-test
-    broker_endpoint: nke-nsp-production-bro-gcl.us-west-2.prd.nsp.nike.com:9500
-    token_url: https://nike.okta.com/oauth2/aus27z7p76as9Dz0H1t7/v1/token
-  nike_okta:
-    key_url: https://nike-qa.oktapreview.com/oauth2/ausa0mcornpZLi0C40h7/v1/keys
-    aud: https://nike-qa.oktapreview.com
-  bg_jobs:
-    expiration_duration: 900
-
-dev:
-  dbx:
-    workspace: nike-sole-react
-    sdb_path: app/dpf/halo
-    sdb_key: ServicePrincipal_nike-sole-react.cloud.databricks.com_App.NikeSole.halo.Developer
-    api_endpoints:
-      catalogs: /api/2.1/unity-catalog/catalogs
-      schemas: /api/2.1/unity-catalog/schemas
-      tables: /api/2.1/unity-catalog/tables
-  cerberus:
-    endpoint: https://prod.cerberus.nikecloud.com
-    db_secrets: app/halo-bmx/data-quality/db-dev
-  nsp:
-    topics:
-      observability-metrics: v1-pdr-auw2-ems-3777331f-af79-4bec-8fa0-feb250d71ab3-observability-metrics-dev
-    broker_endpoint: nke-nsp-production-bro-gcl.us-west-2.prd.nsp.nike.com:9500
-    token_url: https://nike.okta.com/oauth2/aus27z7p76as9Dz0H1t7/v1/token
-  nike_okta:
-    key_url: https://nike-qa.oktapreview.com/oauth2/ausa0mcornpZLi0C40h7/v1/keys
-    aud: https://nike-qa.oktapreview.com
-  bg_jobs:
-    expiration_duration: 900
+rules_data:
+  - product: "your_product"
+    table: "dq_spark_dev.customer_order"
+    type: "row_dq"
+    name: "sales_greater_than_zero"
+    column: "sales"
+    condition: "sales > 2"
+    action: "ignore"
+    category: "accuracy"
+    description: "sales value should be greater than zero"
+    enabled: false
+    notification: false
+    threshold: 0
+    additional_info: null
+  - product: "your_product"
+    table: "dq_spark_{env}.customer_order"
+    type: "row_dq"
+    name: "discount_threshold"
+    column: "discount"
+    condition: "discount*100 < 60"
+    action: "drop"
+    category: "validity"
+    description: "discount should be less than 40"
+    enabled: true
+    notification: false
+    threshold: 0
+    additional_info: null
+  - product: "your_product"
+    table: "dq_spark_{env}.customer_order"
+    type: "row_dq"
+    name: "ship_mode_in_set"
+    column: "ship_mode"
+    condition: "lower(trim(ship_mode)) in('second class', 'standard class', 'standard class')"
+    action: "drop"
+    category: "validity"
+    description: "ship_mode mode belongs in the sets"
+    enabled: true
+    notification: false
+    threshold: 0
+    additional_info: null
+  - product: "your_product"
+    table: "dq_spark_{env}.customer_order"
+    type: "row_dq"
+    name: "profit_threshold"
+    column: "profit"
+    condition: "profit>0"
+    action: "ignore"
+    category: "validity"
+    description: "profit threshold should be greater than 0"
+    enabled: false
+    notification: true
+    threshold: 0
+    additional_info: null
+  - product: "your_product"
+    table: "dq_spark_dev.customer_order"
+    type: "agg_dq"
+    name: "sum_of_sales_range type 1"
+    column: "sales"
+    condition: "sum(sales)>99 and sum(sales)<99999"
+    action: "ignore"
+    category: "validity"
+    description: "regex format validation for quantity"
+    enabled: true
+    notification: false
+    threshold: 0
+    additional_info: null
+    active: true
+  - product: "your_product"
+    table: "dq_spark_dev.customer_order"
+    type: "agg_dq"
+    name: "sum_of_sales_range type 2"
+    column: "sales"
+    condition: "sum(sales) between 100 and 10000"
+    action: "ignore"
+    category: "validity"
+    description: "regex format validation for quantity"
+    enabled: true
+    notification: false
+    threshold: 0
+    additional_info: null
+    active: true
+  - product: "your_product"
+    table: "dq_spark_dev.customer_order"
+    type: "agg_dq"
+    name: "sum_of_sales"
+    column: "sales"
+    condition: "sum(sales)>10000"
+    action: "ignore"
+    category: "validity"
+    description: "regex format validation for quantity"
+    enabled: true
+    notification: false
+    threshold: 0
+    additional_info: null
+  - product: "your_product"
+    table: "dq_spark_dev.customer_order"
+    type: "agg_dq"
+    name: "sum_of_quantity"
+    column: "quantity"
+    condition: "sum(quantity)>10000"
+    action: "ignore"
+    category: "validity"
+    description: "regex format validation for quantity"
+    enabled: true
+    notification: false
+    threshold: 0
+    additional_info: null
+  - product: "your_product"
+    table: "dq_spark_dev.customer_order"
+    type: "query_dq"
+    name: "product_missing_count_threshold"
+    column: "*"
+    condition: "((select count(*) from ({source_f1}) a) - (select count(*) from ({target_f1}) b) ) < 3"
+    source_f1: "select distinct product_id,order_id from order_source"
+    target_f1: "select distinct product_id,order_id from order_target"
+    action: "ignore"
+    category: "validity"
+    description: "row count threshold"
+    enabled: true
+    notification: false
+    threshold: 0
+    additional_info: null
+    active: true
+  - product: "your_product"
+    table: "dq_spark_dev.customer_order"
+    type: "query_dq"
+    name: "customer_missing_count_threshold"
+    column: "*"
+    condition: "((select count(*) from ({source_f1}) a join ({source_f2}) b on a.customer_id = b.customer_id) - (select count(*) from ({target_f1}) a join ({target_f2}) b on a.customer_id = b.customer_id)) > ({target_f3})"
+    source_f1: "select customer_id, count(*) from customer_source group by customer_id"
+    source_f2: "select customer_id, count(*) from order_source group by customer_id"
+    target_f1: "select customer_id, count(*) from customer_target group by customer_id"
+    target_f2: "select customer_id, count(*) from order_target group by customer_id"
+    target_f3: "select count(*) from order_source"
+    action: "ignore"
+    category: "validity"
+    description: "customer count threshold"
+    enabled: true
+    notification: false
+    threshold: 0
+    additional_info: null
+    active: true
+  - product: "your_product"
+    table: "dq_spark_dev.customer_order"
+    type: "query_dq"
+    name: "order_count_validity"
+    column: "*"
+    condition: "({source_f1}) > 10"
+    source_f1: "select count(*) from order_source"
+    action: "ignore"
+    category: "validity"
+    description: "row count threshold"
+    enabled: true
+    notification: false
+    threshold: 0
+    additional_info: "@"
+    active: true
+  - product: "your_product"
+    table: "dq_spark_dev.customer_order"
+    type: "query_dq"
+    name: "order_count_validity_check"
+    column: "*"
+    condition: "(select count(*) from order_source) > 10"
+    action: "ignore"
+    category: "validity"
+    description: "row count threshold"
+    enabled: true
+    notification: false
+    threshold: 0
+    additional_info: null
+    active: true
+  - product: "your_product"
+    table: "dq_spark_{env}.customer_order"
+    type: "query_dq"
+    name: "product_category"
+    column: "*"
+    condition: "(select count(distinct category) from {table}) < 5"
+    action: "ignore"
+    category: "validity"
+    description: "distinct product category"
+    enabled: true
+    notification: false
+    threshold: 0
+    additional_info: null
+    active: true
+  - product: "your_product"
+    table: "dq_spark_{env}.customer_order"
+    type: "agg_dq"
+    name: "distinct_of_ship_mode"
+    column: "ship_mode"
+    condition: "count(distinct ship_mode) <= 3"
+    action: "ignore"
+    category: "validity"
+    description: "regex format validation for quantity"
+    severity: true
+    notification: false
+    threshold: 0
+    additional_info: null
