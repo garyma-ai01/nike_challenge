@@ -1,5 +1,5 @@
 rules_data:
-  - product: "your_product_001"
+  - product: "your_product_003"
     table: "dq_spark_dev.customer_order"
     type: "row_dq"
     name: "sales_greater_than_zero"
